@@ -1,7 +1,7 @@
 {
   "name": "Color Camera Sensor",
   "accessType": "public",
-  "description": "Example of a color camera sensor.",
+  "description": "This is the type of sensor that would be used for the Main Camera in Apollo.\nColor Camera also has multiple post processing sensor effects that can be added to the Postprocessing field in params. Effects can be combined with an array of Postprocessing fields but order is hard coded.\nSee {{DOCS_HOST}}/docs/python-api/#color-camera for more details.",
   "licenseName": "LG Content",
   "copyright": "LG Electronics Inc.",
   "tags": [
