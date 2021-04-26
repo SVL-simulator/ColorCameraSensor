@@ -25,6 +25,10 @@ namespace Simulator.Sensors
         private int renderedFrames;
         private int requiredFrames;
 
+        [SensorParameter]
+        public SensorDistributionType SensorDistributionType = SensorDistributionType.UltraHighLoad;
+        public override SensorDistributionType DistributionType => SensorDistributionType;
+
         public override void Start()
         {
             base.Start();
