@@ -12,6 +12,7 @@ namespace Simulator.Sensors
     using Simulator.Sensors.Postprocessing;
     using Simulator.Utilities;
     using UnityEngine.Rendering.HighDefinition;
+    using UnityEngine.Serialization;
 
     [SensorType("Color Camera", new[] { typeof(ImageData) })]
     [DefaultPostprocessing(typeof(Rain), typeof(SunFlare))]
@@ -25,13 +26,15 @@ namespace Simulator.Sensors
         private int renderedFrames;
         private int requiredFrames;
 
+        [FormerlySerializedAs("SensorDistributionType")]
         [SensorParameter]
-        public SensorDistributionType SensorDistributionType = SensorDistributionType.UltraHighLoad;
-        public override SensorDistributionType DistributionType => SensorDistributionType;
+        public SensorDistributionType sensorDistributionType = SensorDistributionType.ClientOnly;
+        public override float PerformanceLoad { get; } = 1.0f;
+        public override SensorDistributionType DistributionType => sensorDistributionType;
 
-        public override void Start()
+        protected override void Initialize()
         {
-            base.Start();
+            base.Initialize();
             SetupSkyWarmup();
         }
 
