@@ -5,6 +5,8 @@
  *
  */
 
+using UnityEngine;
+
 namespace Simulator.Sensors
 {
     using System.Linq;
@@ -29,19 +31,32 @@ namespace Simulator.Sensors
         [FormerlySerializedAs("SensorDistributionType")]
         [SensorParameter]
         public SensorDistributionType sensorDistributionType = SensorDistributionType.ClientOnly;
+        [FormerlySerializedAs("DisplayIndex")]
+        [SensorParameter]
+        public int DisplayIndex = -1;
         public override float PerformanceLoad { get; } = 1.0f;
         public override SensorDistributionType DistributionType => sensorDistributionType;
 
         protected override void Initialize()
         {
-            base.Initialize();
-            SetupSkyWarmup();
+            if (DisplayIndex == -1)
+            {
+                base.Initialize();
+                SetupSkyWarmup();
+            }
+            else
+            {
+                ActivateOtherDisplay();
+            }
         }
 
         protected override void Update()
         {
-            base.Update();
-            CheckSkyWarmup();
+            if (DisplayIndex == -1)
+            {
+                base.Update();
+                CheckSkyWarmup();
+            }
         }
 
         private void SetupSkyWarmup()
@@ -64,6 +79,26 @@ namespace Simulator.Sensors
 
             renderedFrames++;
             RenderCamera();
+        }
+
+        private void ActivateOtherDisplay()
+        {
+            if (Display.displays.Length > DisplayIndex)
+            {
+                SensorCamera.targetDisplay = DisplayIndex;
+                if (renderTarget != null)
+                {
+                    renderTarget.Release();
+                    renderTarget = null;
+                }
+                SensorCamera.targetTexture = null;
+                SensorCamera.enabled = true;
+
+                var display = Display.displays[DisplayIndex];
+                display.Activate(display.systemWidth, display.systemHeight, 60);
+
+                OnVisualizeToggle(true);
+            }
         }
     }
 }
